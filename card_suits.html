@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Test JS</title>
+	<link rel="stylesheet" href="style.css">
+<!--
+	<script src="script.js"></script>
+-->
+</head>
+<body>
+
+	<canvas id="test">test</canvas>
+
+	<script>
+		var test = document.getElementById("test");
+		if (test && test.getContext) {
+			var context = test.getContext("2d");
+
+/*			Heart			*/
+
+			var w = test.width = 500;
+			var h = test.height = 500;
+
+			var pictureWidth = w * 3/10;
+			var pictureHeight = h * 1/4;
+
+			var radius = pictureWidth / 4;
+
+			var x = w / 4;
+			var x1 = x - radius;
+			var x2 = x + radius;
+
+			var y = h / 4;
+			var y1 = y - pictureHeight / 2 + radius;
+			var y2 = y + pictureHeight / 2;
+
+			var angle = Math.PI/3;
+
+			context.lineWidth = 3;
+
+			context.fillStyle = "lavenderblush";
+			context.strokeStyle = "crimson";
+
+			context.beginPath();
+
+			context.moveTo(x, y1);
+			context.arc(x2, y1, radius, Math.PI, angle, false);
+			context.quadraticCurveTo(x, y2 - radius/2, x, y2);
+			context.quadraticCurveTo( x, y2 - radius/2, 
+				x1 - radius * Math.cos(angle), y1 + radius * Math.sin(angle) );
+			context.arc(x1, y1, radius, Math.PI - angle, 0, false);
+
+			context.closePath();
+			context.fill();
+			context.stroke();
+
+/*			Spades			*/
+
+			var pinWidth = 1.5 * radius;
+			var pinHeight = 1.75 * radius;
+
+			var pictureFullHeight = pictureHeight + pinHeight - radius;
+
+			x = w * 3/4;
+			x1 = x - radius;
+			x2 = x + radius;
+
+			var x4 = x - pinWidth / 2;
+			var x5 = x + pinWidth / 2;
+
+			y1 = y - pictureFullHeight / 2;
+			y2 = y1 + pictureHeight - radius;
+
+			var y3 = y + pictureFullHeight / 2;
+
+			context.fillStyle = "lavender";
+			context.strokeStyle = "indigo";
+
+			context.beginPath();
+
+			context.moveTo(x, y2);
+			context.arc(x2, y2, radius, Math.PI, 2*Math.PI - angle, true);
+			context.quadraticCurveTo(x, y1 + radius/2, x, y1);
+			context.quadraticCurveTo( x, y1 + radius/2, 
+				x1 - radius * Math.cos(angle), y2 - radius * Math.sin(angle) );
+			context.arc(x1, y2, radius, Math.PI + angle, 2*Math.PI, true);
+
+			context.quadraticCurveTo(x, y3 - pinHeight / 3, x4, y3);
+			context.quadraticCurveTo(x, y3 - pinHeight / 3, x5, y3);
+			context.quadraticCurveTo(x, y3 - pinHeight / 3, x, y2);
+
+			context.closePath();
+			context.fill();
+			context.stroke();
+
+/*			Clubs			*/
+
+			x = w * 1/4;
+			x1 = x - radius;
+			x2 = x + radius;
+
+			var x4 = x - pinWidth / 2;
+			var x5 = x + pinWidth / 2;
+
+			y = h * 3/4;
+			y1 = y - pictureFullHeight / 2 + radius;
+			y2 = y1 + pictureHeight - 2 * radius;
+
+			var y3 = y + pictureFullHeight / 2;
+
+			var distanceX = radius;
+			var distanceY = pictureHeight - 2 * radius;
+			var distance = Math.sqrt( Math.pow(distanceX, 2) + Math.pow(distanceY, 2) );
+
+			var axisAngle = Math.asin(distanceY / distance);
+			angle = 2 * Math.asin( Math.sqrt( 1 - Math.pow(distance, 2) / 
+				( 4 * Math.pow(radius, 2) ) ) );
+
+			context.beginPath();
+
+			context.moveTo(x, y2);
+			context.arc(x2, y2, radius, Math.PI, Math.PI + axisAngle + angle/2, true);
+			context.arc(x, y1, radius, 
+				axisAngle - angle/2, Math.PI - axisAngle + angle/2, true);
+			context.arc(x1, y2, radius, 2*Math.PI - axisAngle - angle/2, 0, true);
+
+			context.quadraticCurveTo(x, y3 - pinHeight / 3, x4, y3);
+			context.quadraticCurveTo(x, y3 - pinHeight / 3, x5, y3);
+			context.quadraticCurveTo(x, y3 - pinHeight / 3, x, y2);
+
+			context.closePath();
+			context.fill();
+			context.stroke();
+
+/*			Diamonds			*/
+
+			pictureHeight = pictureWidth;
+
+			x = w * 3/4;
+			x1 = x - pictureWidth / 2;
+			x2 = x + pictureWidth / 2;
+
+			y1 = y - pictureHeight / 2;
+			y2 = y + pictureHeight / 2;
+
+			distanceX = pictureWidth / 2;
+			distanceY = pictureHeight / 2;
+
+			distance = Math.sqrt( Math.pow(distanceX, 2) + Math.pow(distanceY, 2) );
+
+			var vectorX = distanceX / distance;
+			var vectorY = distanceY / distance;
+
+			var curvePointDistance = radius / 2;
+
+			var curvePointX = distanceX / 2 - vectorY * curvePointDistance;
+			var curvePointY = distanceY / 2 - vectorX * curvePointDistance;
+
+			context.fillStyle = "lavenderblush";
+			context.strokeStyle = "crimson";
+
+			context.beginPath();
+
+			context.moveTo(x, y1);
+			context.quadraticCurveTo(x - curvePointX, y - curvePointY, x1, y);
+			context.quadraticCurveTo(x - curvePointX, y + curvePointY, x, y2);
+			context.quadraticCurveTo(x + curvePointX, y + curvePointY, x2, y);
+			context.quadraticCurveTo(x + curvePointX, y - curvePointY, x, y1);
+
+			context.closePath();
+			context.fill();
+			context.stroke();
+		}
+	</script>
+
+</body>
+</html>
